@@ -1,4 +1,4 @@
-AI Social Media Threat Detector
+Smart_Comment_Safety_Analyzer
 
 An AI-powered web application that detects and classifies social media comments into the following categories:
 
