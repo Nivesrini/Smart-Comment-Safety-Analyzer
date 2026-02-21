@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Social Media Threat Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h2>Social Media Threat Detector</h2>
+
+<form method="POST">
+<textarea name="comment" placeholder="Enter your comment..." required>{{ comment }}</textarea>
+<br>
+<button type="submit">Analyze</button>
+</form>
+
+{% if result %}
+
+<div class="yellow-box">
+<b>Comment:</b> {{ comment }} <br>
+<b>Sentiment:</b> {{ result }}
+</div>
+
+<br>
+
+<canvas id="myChart"></canvas>
+
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['Good','Offensive','Threatening'],
+datasets: [{
+label: 'Confidence',
+data: [{{ probs["Good"] }}, {{ probs["Offensive"] }}, {{ probs["Threatening"] }}],
+backgroundColor: ['#4CAF50','#f44336','#ffeb3b']
+}]
+},
+options: { scales: { y: { beginAtZero:true, max:1 } } }
+});
+</script>
+
+{% if result == "Offensive" or result == "Threatening" %}
+<div class="help-box">
+<p>This comment seems harmful. Do you need help?</p>
+
+<button onclick="showHelp()">Yes, I need help</button>
+<button onclick="showMotivation()">No, I'm okay</button>
+
+<div id="helpline" style="display:none;">
+<p><b>Cyber Crime Portal:</b> https://cybercrime.gov.in</p>
+<p><b>Helpline:</b> 1930</p>
+</div>
+
+<div id="motivation" style="display:none;">
+<p>You are stronger than you think 💪</p>
+<p>Stay positive and keep moving forward 🌟</p>
+</div>
+</div>
+{% endif %}
+
+{% endif %}
+</div>
+
+<script>
+function showHelp(){
+    document.getElementById("helpline").style.display = "block";
+    document.getElementById("motivation").style.display = "none";
+}
+function showMotivation(){
+    document.getElementById("motivation").style.display = "block";
+    document.getElementById("helpline").style.display = "none";
+}
+</script>
+
+</body>
+</html>
